@@ -43,7 +43,7 @@ def plotNaturalExponent_e():
     eValue = np.exp(z)
     #logValues = np.log(eValue)  # this should equal z
     logValues = np.log(z)
-    # plt.plot(z, eValue, 'ko-', label='exp(z)')
+    plt.plot(z, eValue, 'ko-', label='exp(z)')
     #plt.plot(z, logValues, 'r^-', label='log(exp(z))')
     plt.plot(z, logValues, 'r^-', label='log((z))')
 
@@ -54,10 +54,20 @@ def plotNaturalExponent_e():
     plt.grid(True)
     plt.show()
 
+def plotLogValues():
+    z = np.linspace(0.001, 5, 200)
+    logValue = np.log(z)
+    plt.plot(z, logValue, 'ko')
+    plt.xlabel('Original Number (z)')
+    plt.ylabel('Log Value $\log$')
+    plt.show()
+
+
 
 if __name__ == "__main__" :
-    plotNaturalExponent_e()
+    #plotNaturalExponent_e()
     # softMaxUsingNumPy(None)
     #softMaxUsingNumPyWithRandom()
     #softMaxUsingPytorchWithRandom()
+    plotLogValues()
    
