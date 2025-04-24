@@ -22,7 +22,7 @@ def calculateBinaryCrossEntropyWithNumpy():
     p = [1 , 0]           # Probability that the picture is a Dog
     q = [0.25, 0.75]      # Probability of the Model predecting if its a Dog
 
-    H = 0
+    H = 0 
 
     for i in range (len(p)):
         H+= -p[i]*np.log(q[i])
