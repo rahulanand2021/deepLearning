@@ -19,6 +19,7 @@ def createLargeRandomSample():
     for index in range(noOfExperiments):
         sample = np.random.choice(x,size=5,replace=True)
         sampleMeans[index] = np.mean(sample)
+        
     print(sampleMeans)  
 
     plt.hist(sampleMeans, bins=40, density=True)
