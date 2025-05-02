@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sympy as sym
 import sympy.plotting.plot as symplot
-from sympy.plotting.plot import MatplotlibBackend
+from sympy.plotting.plot import MatplotlibBackend   
+from rich import print
 
 def simpleDerivative():
 
@@ -12,6 +13,20 @@ def simpleDerivative():
 
     p = symplot(fx, (x, -5, 5), label="The Function", show=False, line_color='blue')
     p.extend(symplot(df, (x, -5, 5), label="Differentiation", show=False, line_color='red'))
+    p.legend = True
+    p.title = "The Functions with its Differentiations"
+    p.show()
+
+def anotherPolynomialDerivatives():
+    x = sym.symbols('x')
+    fx = -x**4 + 3*x**2
+    df = sym.diff(fx,x)
+    print(fx)
+    print(df)
+    print(sym.solve(df))
+
+    p = symplot(fx, (x, -2, 2), label="The Function", show=False, line_color='blue')
+    p.extend(symplot(df, (x, -1.5, 1.5), label="Differentiation", show=False, line_color='red'))
     p.legend = True
     p.title = "The Functions with its Differentiations"
     p.show()
@@ -28,5 +43,6 @@ def reluAndSigmoidDerivatives():
     p.show()
 
 if __name__ == "__main__":
-    simpleDerivative()
+    # simpleDerivative()
+    anotherPolynomialDerivatives()
     # reluAndSigmoidDerivatives()
