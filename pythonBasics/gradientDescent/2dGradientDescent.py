@@ -67,6 +67,7 @@ def twoDimensionGradientDescent():
     plt.plot(startPoint[0],startPoint[1],'bs')
     plt.plot(localminimum[0],localminimum[1],'ro')
     plt.plot(trajectory[: , 0],trajectory[: , 1],'r')
+    plt.legend(['Random Start', 'Local Minimum'])
     plt.colorbar()
     plt.show()
  
