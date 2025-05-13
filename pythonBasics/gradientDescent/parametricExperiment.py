@@ -56,15 +56,13 @@ def variousStartingLocationwithGradientDescent():
     plt.show()
 
 def varyingLearningRateWithGradientDescent():
-    learningRates = np.linspace(1e-10,1e-1,50)
+    learningRates = np.linspace(1e-10,1e-1,500)
     finalRes  = np.zeros(len(learningRates))
 
     training_epocs = 1000
 
     for idx, learning_Rates in enumerate(learningRates) :
-
         # Fixed this factor and systematically vary Learning Rates
-
         localMinimum = 0
         for index in range(training_epocs):
             grad = dfx_numeric(localMinimum)
@@ -73,6 +71,29 @@ def varyingLearningRateWithGradientDescent():
         finalRes[idx] = localMinimum
     
     plt.plot(learningRates, finalRes, 's--')
+    plt.grid()
+    plt.xlabel('Learning Rates ')
+    plt.ylabel('Final Local Minimum after GD')
+    plt.show()
+
+def varyingLearningRatesAndTrainingEpocsWithGradientDescent():
+
+    learningRates = np.linspace(1e-10,1e-1,50)
+    finalRes  = np.zeros(len(learningRates))
+
+    training_epocs = 1000
+
+    for idx, learning_Rates in enumerate(learningRates) :
+        # Fixed this factor and systematically vary Learning Rates
+        localMinimum = 0
+        for index in range(training_epocs):
+            grad = dfx_numeric(localMinimum)
+            localMinimum = localMinimum - grad*learning_Rates
+        # print(f"After GD, Actual LocalMinimum : {localMinimum}")
+        finalRes[idx] = localMinimum
+    
+    plt.plot(learningRates, finalRes, 's--')
+    plt.grid()
     plt.xlabel('Learning Rates ')
     plt.ylabel('Final Local Minimum after GD')
     plt.show()
@@ -90,3 +111,4 @@ if __name__ == "__main__":
     # simpleGradientDescent()
     # variousStartingLocationwithGradientDescent()
     varyingLearningRateWithGradientDescent()
+    varyingLearningRatesAndTrainingEpocsWithGradientDescent()
