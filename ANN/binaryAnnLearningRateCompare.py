@@ -137,10 +137,31 @@ def runLearningRateExperiment(data, lables):
     ax[1].set_title('Losses by Learning Rate')    
     plt.show()
 
+def runMetaLearningRateExperiment(data, lables):
+    
+    numberOfExpMeta = 50
+
+    learningRates = np.linspace(0.01,.1, 40)
+    accuracyMeta = np.zeros((numberOfExpMeta, len(learningRates)))
+
+    for experi in range (numberOfExpMeta) :
+        print(f'Running Meta Experiment for Learing Rate for {experi} time')
+        for index, lr in enumerate(learningRates):
+            ANNModel, lossFunction, optimizer = buildArtificialNeuralNetwork(learningRate=lr)
+            losses, predictions, totalAccuracy = trainTheModel(ANNModel,lossFunction,optimizer, data, lables)
+            accuracyMeta[experi, index] = totalAccuracy
+
+    plt.plot(learningRates, np.mean(accuracyMeta, axis=0), 's-')
+    plt.xlabel('Learning Rates')
+    plt.ylabel('Accuracy')
+    plt.title('Accuracy by Learning Rate')
+    plt.show()
+
 if __name__ == "__main__":
     learningRate = 0.1
     data , labels = buildCategoricalData()
     # ANNModel, lossFunction, optimizer = buildArtificialNeuralNetwork(learningRate=learningRate)
     # losses, predictions, totalAccuracy = trainTheModel(ANNModel, lossFunction, optimizer,data, labels)
     # plotLosses(losses, totalAccuracy)
-    runLearningRateExperiment(data=data, lables=labels)
+    # runLearningRateExperiment(data=data, lables=labels)
+    runMetaLearningRateExperiment(data=data, lables=labels)
