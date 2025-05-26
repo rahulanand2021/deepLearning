@@ -26,13 +26,13 @@ def buildCategoricalData():
     labels = torch.tensor(labels_np).float()
 
     # show the data
-    # fig = plt.figure(figsize=(5,5))
-    # plt.plot(data[np.where(labels==0)[0],0],data[np.where(labels==0)[0],1],'bs')
-    # plt.plot(data[np.where(labels==1)[0],0],data[np.where(labels==1)[0],1],'ko')
-    # plt.title('The qwerties!')
-    # plt.xlabel('qwerty dimension 1')
-    # plt.ylabel('qwerty dimension 2')
-    # plt.show()
+    fig = plt.figure(figsize=(5,5))
+    plt.plot(data[np.where(labels==0)[0],0],data[np.where(labels==0)[0],1],'bs')
+    plt.plot(data[np.where(labels==1)[0],0],data[np.where(labels==1)[0],1],'ko')
+    plt.title('The qwerties!')
+    plt.xlabel('qwerty dimension 1')
+    plt.ylabel('qwerty dimension 2')
+    plt.show()
 
     return data , labels
 
