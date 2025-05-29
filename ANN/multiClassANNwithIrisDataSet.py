@@ -37,7 +37,21 @@ def createANNModel():
 
     return ANNiris, lossFunction, optimizer
 
-def trainTheModel(ANNiris, lossFunction, optimizer, data, labels):
+def createANNModel(hiddenLayer):
+    ANNiris = nn.Sequential(
+                nn.Linear(4,hiddenLayer),
+                nn.ReLU(),
+                nn.Linear(hiddenLayer,hiddenLayer),
+                nn.ReLU(),
+                nn.Linear(hiddenLayer,3)
+    )
+
+    lossFunction = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(ANNiris.parameters(),lr=.01)  # Flavour for Gradient Descent
+
+    return ANNiris, lossFunction, optimizer
+
+def trainTheModel(ANNModeliris, lossFunction, optimizer, data, labels):
     
     numberOfEpochs = 1000
 
@@ -45,7 +59,7 @@ def trainTheModel(ANNiris, lossFunction, optimizer, data, labels):
     ongoingAccuracy = []
     yHat  = None
     for epoch_i in range(numberOfEpochs):
-        yHat = ANNiris(data)                 # Forward Pass
+        yHat = ANNModeliris(data)                 # Forward Pass
 
         # Compute Loss
         loss = lossFunction(yHat,labels)
@@ -62,10 +76,10 @@ def trainTheModel(ANNiris, lossFunction, optimizer, data, labels):
         accuracyPct = 100*torch.mean(matchNumeric)
         ongoingAccuracy.append(accuracyPct)
 
-    predictions = ANNiris(data)
+    predictions = ANNModeliris(data)
     predLabel = torch.argmax(predictions, axis = 1)
     totalAccuracy = 100*torch.mean((predLabel == labels).float())
-    print(f'Total Accuracys is {totalAccuracy} %')
+    print(f'Total Accuracys is {totalAccuracy} % ')
     sm = nn.Softmax(1)
     # print(yHat)                         # Show the Raw Predictions
     # print(torch.sum((yHat), axis=1))    # Show the output of 150 data points, summed across rows, axis = 1
@@ -92,9 +106,52 @@ def trainTheModel(ANNiris, lossFunction, optimizer, data, labels):
     # plt.legend(['setosa', 'versicolor', 'virginica'])
     # plt.show()
 
+def trainTheModelForDynamicHiddenLayer(ANNModeliris, lossFunction, optimizer, data, labels, hiddenLayer):
+    
+    numberOfEpochs = 1000
+
+    losses = torch.zeros(numberOfEpochs)
+    yHat  = None
+
+    for epoch_i in range(numberOfEpochs):
+        yHat = ANNModeliris(data)                 # Forward Pass
+
+        # Compute Loss
+        loss = lossFunction(yHat,labels)
+        losses[epoch_i] = loss
+
+        # BackProp
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    predictions = ANNModeliris(data)
+    predLabel = torch.argmax(predictions, axis = 1)
+    totalAccuracy = 100*torch.mean((predLabel == labels).float())
+    print(f'Total Accuracys is {totalAccuracy} % for hidden Layer {hiddenLayer}')
+    return totalAccuracy
+
+def trainModelOverDynamicHiddenLayer(data, labels):
+    #noOfExperiments = 150
+    noOfHiddenLayer = np.arange(1,129)
+    accuraciesOfGivenLayer = []
+
+    for hiddenLayer in noOfHiddenLayer:
+        ANNModeliris, lossFunction, optimizer = createANNModel(hiddenLayer)
+        acc = trainTheModelForDynamicHiddenLayer(ANNModeliris, lossFunction, optimizer, data, labels, hiddenLayer)
+        accuraciesOfGivenLayer.append(acc)
+    
+    fig, ax = plt.subplots(1, figsize=(12,6))
+    ax.plot(accuraciesOfGivenLayer, 'ko-', markerfacecolor='w', markersize=9)
+    ax.set_xlabel('Number of Hidden Unit')
+    ax.set_ylabel('Accuracies')
+    ax.set_title("Accuracy Chart!")
+    plt.show()
+
 if __name__ == "__main__":
     iris_data = loadDataSet()
     # showPairPlot(iris_data)
     data , labels = transformPandasToTensor(iris_data)
-    ANNiris, lossFunction, optimizer = createANNModel()
-    trainTheModel(ANNiris, lossFunction, optimizer, data, labels)
+    # ANNiris, lossFunction, optimizer = createANNModel()
+    # trainTheModel(ANNiris, lossFunction, optimizer, data, labels)
+    trainModelOverDynamicHiddenLayer(data,labels)
